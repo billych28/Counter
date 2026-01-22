@@ -8,16 +8,18 @@
 import UIKit
 
 final class ViewController: UIViewController {
-
-    @IBOutlet weak var counterLabel: UILabel!
-    @IBOutlet weak var incrementButton: UIButton!
-    @IBOutlet weak var decrementButton: UIButton!
-    @IBOutlet weak var resetButton: UIButton!
-    @IBOutlet weak var historyTextView: UITextView!
+    
+    private let dateFormatter = DateFormatter()
+    
+    @IBOutlet private weak var counterLabel: UILabel!
+    @IBOutlet private weak var incrementButton: UIButton!
+    @IBOutlet private weak var decrementButton: UIButton!
+    @IBOutlet private weak var resetButton: UIButton!
+    @IBOutlet private weak var historyTextView: UITextView!
     
     private var count: Int = 0
+    
     private var history: String = "История изменений:\n"
-    private let dateFormatter = DateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,15 +27,25 @@ final class ViewController: UIViewController {
         dateFormatter.locale = Locale.current
         historyTextView.text = history
     }
+    
+    private func getDateString() -> String {
+        let date = Date()
+        return dateFormatter.string(from: date)
+    }
+    
+    private func updateUi() {
+        counterLabel.text = "Значение счётчика: \(count)"
+        historyTextView.text = history
+    }
 
-    @IBAction func incrementCounter() {
+    @IBAction private func incrementCounter() {
         let dateString = getDateString()
         count += 1
         history += "[\(dateString)]: значение изменено на +1\n"
         updateUi()
     }
     
-    @IBAction func decrementCounter() {
+    @IBAction private func decrementCounter() {
         let dateString = getDateString()
         if count > 0 {
             history += "[\(dateString)]: значение изменено на -1\n"
@@ -44,21 +56,11 @@ final class ViewController: UIViewController {
         updateUi()
     }
     
-    @IBAction func resetCounter() {
+    @IBAction private func resetCounter() {
         let dateString = getDateString()
         count = 0
         history += "[\(dateString)]: значение сброшено\n"
         updateUi()
-    }
-    
-    func updateUi() {
-        counterLabel.text = "Значение счётчика: \(count)"
-        historyTextView.text = history
-    }
-    
-    func getDateString() -> String {
-        let date = Date()
-        return dateFormatter.string(from: date)
     }
     
 }
